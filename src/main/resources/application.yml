@@ -1,0 +1,28 @@
+server:
+  port: 8080
+  servlet:
+    encoding:
+      charset: utf-8
+      force: true
+      
+
+
+spring:
+  mvc:
+    view:
+      prefix: /WEB_INF/view/
+      suffix: .jsp
+  datasource:
+  #인메모리 데이터베이스를 mysql로 지정하겠다
+    url: jdbc:h2:mem:testdb;MODE=MySQL
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  
+  #쿼리문을 콘솔창에 찍어주는 옵션 설정
+  h2:
+    console: 
+      enabled: true
+  output: 
+    ansi: 
+      enabled: always
