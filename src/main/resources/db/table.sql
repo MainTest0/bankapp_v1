@@ -3,7 +3,7 @@ CREATE TABLE user_tb(
     username VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(30) NOT NULL,
     fullname VARCHAR(50) NOT NULL,
-    created_At TIMESTAMP NOT NULL DEFAULT now()
+    created_at TIMESTAMP NOT NULL DEFAULT now()
 );
 
 CREATE TABLE account_tb(
@@ -12,7 +12,7 @@ CREATE TABLE account_tb(
     password VARCHAR(20) NOT NULL,
     balance BIGINT NOT NULL COMMENT '계좌 잔액',
     user_id INT,
-    created_At TIMESTAMP NOT NULL DEFAULT NOW()
+    created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE history_tb(
@@ -22,5 +22,5 @@ CREATE TABLE history_tb(
     d_account_id INT COMMENT '입금계좌 id',
     w_balance BIGINT COMMENT '출금 요청된 계좌의 잔액',
     d_balance BIGINT COMMENT '입금 요청된 계좌의 잔액',
-    create_At TIMESTAMP NOT NULL DEFAULT now()
+    created_at TIMESTAMP NOT NULL DEFAULT now()
 );
