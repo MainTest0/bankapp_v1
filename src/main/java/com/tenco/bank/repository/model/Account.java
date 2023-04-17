@@ -5,7 +5,6 @@ import java.sql.Timestamp;
 import lombok.Data;
 
 /*
- * 모델 클래스(VO 개념, Value Object 역할만 하는 것은 아니다.)
  * 자기 자신을 바라봤을 때 출금하는 기능 있을 수 있다.
  * 입금하는 기능도 만들 수 있다.
  * 처음에 스타크래프트 피빼는걸로 연습했음

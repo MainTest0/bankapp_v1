@@ -4,13 +4,11 @@ server:
     encoding:
       charset: utf-8
       force: true
-      
-
 
 spring:
   mvc:
     view:
-      prefix: /WEB_INF/view/
+      prefix: /WEB-INF/view/
       suffix: .jsp
   datasource:
   #인메모리 데이터베이스를 mysql로 지정하겠다
@@ -32,3 +30,13 @@ spring:
   output: 
     ansi: 
       enabled: always
+
+mybatis: 
+  mapper-locations:
+  - classpath:mapper/**.xml   # classpath가 바라보는 곳: resources
+  configuration:
+    map-underscore-to-camel-case: true  #매핑을 하는데 언더 스코어를 카멜노테이션으로 바꾸겠다.
+     
+ 
+ 
+      
