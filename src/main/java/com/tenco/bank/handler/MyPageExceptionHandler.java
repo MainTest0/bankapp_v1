@@ -13,7 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @ControllerAdvice
 public class MyPageExceptionHandler {
-	
+
 	// 사용자 정의 클래스 활용
 	@ExceptionHandler(CustomPageException.class)
 	public ModelAndView handleRuntimePageException(CustomPageException e) {
@@ -21,7 +21,7 @@ public class MyPageExceptionHandler {
 		ModelAndView modelAndView = new ModelAndView("errorPage");
 		modelAndView.addObject("statusCode", HttpStatus.NOT_FOUND.value());
 		modelAndView.addObject("message", e.getMessage());
-		
+
 		return modelAndView;
 	}
 
