@@ -8,15 +8,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tenco.bank.dto.SaveFormDto;
+import com.tenco.bank.dto.WithDrawFormDto;
 import com.tenco.bank.handler.exception.CustomRestfullException;
 import com.tenco.bank.repository.interfaces.AccountRepository;
+import com.tenco.bank.repository.interfaces.HistoryRepository;
 import com.tenco.bank.repository.model.Account;
+import com.tenco.bank.repository.model.History;
 
 @Service // IoC 대상 + 싱글톤으로 관리
 public class AccountService {
 
 	@Autowired // DI 처리
 	private AccountRepository accountRepository;
+
+	@Autowired
+	private HistoryRepository historyRepository;
 
 	/**
 	 * 계좌 생성 기능
@@ -40,14 +46,65 @@ public class AccountService {
 		}
 
 	}
-	
+
 	// 계좌 목록 보기 기능
 	@Transactional
-	public List<Account> readAccountList(Integer userId){
-		
+	public List<Account> readAccountList(Integer userId) {
+
 		List<Account> list = accountRepository.findByUserId(userId);
-		
+
 		return list;
+	}
+
+	// 출금 기능 로직 고민해보기
+	// 1. 계좌 존재 여부 확인 -> select query
+	// 2. 본인 계좌 여부 확인
+	// 3. 계좌 비번 확인
+	// 4. 잔액 여부 확인(계좌에 출금하려는 돈이 없는데 출금하려할 때)
+	// 5. 출금 처리 -> update query
+	// 6. 거래 내역 등록 -> insert query
+	// 7. 트랜잭션 처리
+	@SuppressWarnings("unused")
+	@Transactional
+	public void updateAccountwithDraw(WithDrawFormDto withDrawFormDto, Integer principalId) {
+
+		Account accountEntity = accountRepository.findByNumber(withDrawFormDto.getWAccountNumber());
+		System.out.println(accountEntity.toString());
+		// 1.
+		if (accountEntity == null) {
+			throw new CustomRestfullException("해당 계좌가 없습니다.", HttpStatus.BAD_REQUEST);
+		}
+		// 2.
+		if (accountEntity.getUserId() != principalId) {
+			throw new CustomRestfullException("본인 소유 계좌가 아닙니다.", HttpStatus.UNAUTHORIZED);
+		}
+		// 3. 이퀄스가 T고 비교가 F면 == false이다.
+		if (accountEntity.getPassword().equals(withDrawFormDto.getWAccountPassword()) == false) {
+			throw new CustomRestfullException("출금 계좌 비밀번호가 틀렸습니다.", HttpStatus.UNAUTHORIZED);
+		}
+		// 4.
+		if (accountEntity.getBalance() < withDrawFormDto.getAmount()) {
+			throw new CustomRestfullException("계좌 잔액이 부족합니다.", HttpStatus.BAD_REQUEST);
+		}
+		// 5. 모델 객체 상태값 변경 처리
+		accountEntity.withDraw(withDrawFormDto.getAmount());
+		// 아래코드는 위 기능 선언한거 풀어쓴거
+//		accountEntity.setBalance(accountEntity.getBalance() - withDrawFormDto.getAmount());
+		accountRepository.updateById(accountEntity);
+
+		// 6. 거래내역 등록
+		History history = new History();
+		history.setAmount(withDrawFormDto.getAmount());
+		history.setWAccountId(accountEntity.getId());
+		history.setDAccountId(null);
+		history.setWBalance(accountEntity.getBalance()); // 고민하기
+		history.setDBalance(null);
+
+		int resultRowCount = historyRepository.insert(history);
+		if (resultRowCount != 1) {
+			throw new CustomRestfullException("정상 처리되지 않았습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
 	}
 
 }

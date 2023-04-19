@@ -16,7 +16,10 @@ public interface AccountRepository {
 	
 	public List<Account> findAll();	// 관리자용 모든 계좌 확인	
 	public Account fintById(int id);
-	
+	// 코드 추가
 	public List<Account> findByUserId(Integer userId);
+	
+	// 코드 추가 - 계좌 번호로 찾는 기능 추가(계좌 존재 여부)
+	public Account findByNumber(String number);
 	
 }
