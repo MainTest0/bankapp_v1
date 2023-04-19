@@ -17,7 +17,7 @@ public class Account {
 	private String number;
 	private String password;
 	private Long balance;
-	private String userId;
+	private Integer userId;
 	private Timestamp createdAt;
 	
 	public void withDraw(Long amount) {
