@@ -21,9 +21,7 @@ public class Account {
 	private Timestamp createdAt;
 	
 	public void withDraw(Long amount) {
-		
 		this.balance -= amount;
-		
 	}
 
 	public void deposit(Long amount) { // 거래량
