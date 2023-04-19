@@ -13,8 +13,10 @@ public interface AccountRepository {
 	public int updateById(Account account);
 	public int deleteById(int id);
 	
-	// 관리자용 모드 계좌 확인 (+ 나중에 추가)
-	public List<Account> findAll();	
+	
+	public List<Account> findAll();	// 관리자용 모든 계좌 확인	
 	public Account fintById(int id);
+	
+	public List<Account> findByUserId(Integer userId);
 	
 }
