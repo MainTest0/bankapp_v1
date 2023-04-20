@@ -36,6 +36,7 @@ mybatis:
   - classpath:mapper/**.xml   # classpath가 바라보는 곳: resources
   configuration:
     map-underscore-to-camel-case: true  #매핑을 하는데 언더 스코어를 카멜노테이션으로 바꾸겠다.
+    #(이거 안써주면 sql에서 쓴거처럼 스네이크 케이스로 써줘야함)
      
  
  

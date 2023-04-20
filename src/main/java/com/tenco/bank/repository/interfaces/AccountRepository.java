@@ -15,7 +15,7 @@ public interface AccountRepository {
 	
 	
 	public List<Account> findAll();	// 관리자용 모든 계좌 확인	
-	public Account fintById(int id);
+	public Account findById(int id);
 	// 코드 추가
 	public List<Account> findByUserId(Integer userId);
 	

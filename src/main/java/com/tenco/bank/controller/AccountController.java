@@ -9,13 +9,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.tenco.bank.dto.DepositFormDto;
 import com.tenco.bank.dto.SaveFormDto;
 import com.tenco.bank.dto.TransferFormDto;
 import com.tenco.bank.dto.WithDrawFormDto;
+import com.tenco.bank.dto.response.HistoryDto;
 import com.tenco.bank.handler.exception.CustomRestfullException;
 import com.tenco.bank.handler.exception.UnAuthorizedException;
 import com.tenco.bank.repository.model.Account;
@@ -172,6 +175,10 @@ public class AccountController {
 		}
 		// ------유효성 검사만 계좌있는지는 서비스쪽에서
 
+		// 6. 이체금액 안적었을 때
+		if (transferFormDto.getAmount() == null) {
+			throw new CustomRestfullException("이체 금액을 입력해주세요", HttpStatus.BAD_REQUEST);
+		}
 		// 1. 출금 계좌 번호 입력 여부
 		if (transferFormDto.getWAccountNumber() == null || transferFormDto.getWAccountNumber().isEmpty()) {
 			throw new CustomRestfullException("출금 계좌 번호를 입력해주세요", HttpStatus.BAD_REQUEST);
@@ -189,11 +196,10 @@ public class AccountController {
 			throw new CustomRestfullException("이체 금액이 0원 이하일 수 없습니다.", HttpStatus.BAD_REQUEST);
 		}
 		// 5. 출금계좌 입금계좌 번호 동일 여부 확인
-		if(transferFormDto.getWAccountNumber().equals(transferFormDto.getDAccountNumber())) {
+		if (transferFormDto.getWAccountNumber().equals(transferFormDto.getDAccountNumber())) {
 			throw new CustomRestfullException("출금계좌와 입금계좌는 동일할 수 없습니다.", HttpStatus.BAD_REQUEST);
 		}
-		// 6. 이체금액 안적었을 때
-		
+
 		// 서비스 호출
 		accountService.updateAccountTransfer(transferFormDto, principal.getId());
 
@@ -242,9 +248,27 @@ public class AccountController {
 	}
 
 	// 계좌 상세 보기 페이지
-	@GetMapping("/detail")
-	public String detail() {
-
-		return "";
+	@GetMapping("/detail/{id}")
+	public String detail(@PathVariable Integer id, @RequestParam(name = "type", defaultValue = "all", required = false) String type, Model model) {
+		User principal = (User) session.getAttribute(Define.PRINCIPAL);
+		if(principal == null) {
+			throw new CustomRestfullException("로그인 먼저 해주세요", HttpStatus.UNAUTHORIZED);
+		}
+		System.out.println("type : " + type);
+		// 거래내역 결과 집합 = 서비스.메서드();
+		List<HistoryDto> historyList = accountService.readHistoryListByAccount(type, id);
+		Account account = accountService.readAccount(id);
+		
+		// 화면을 구성하기 위해 필요한 데이터 살펴보기
+		// 소유자 이름
+		// 계좌번호(1개)상세보기
+		// 계좌 잔액
+		// 거래 내역
+		model.addAttribute("principal", principal);
+		model.addAttribute("account", account);
+		model.addAttribute("historyList", historyList);
+		
+		
+		return "/account/detail";
 	}
 }

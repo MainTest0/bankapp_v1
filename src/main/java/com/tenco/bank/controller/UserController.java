@@ -108,7 +108,7 @@ public class UserController {
 
 		// 세션 완전 삭제하기
 		session.invalidate();
-
+		
 		return "redirect:/user/sign-in";
 
 	}

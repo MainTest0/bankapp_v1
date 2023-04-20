@@ -1,6 +1,7 @@
 package com.tenco.bank.repository.model;
 
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 
 import org.springframework.http.HttpStatus;
 
@@ -23,6 +24,13 @@ public class Account {
 	private Long balance;
 	private Integer userId;
 	private Timestamp createdAt;
+
+	public String formatBalance() {
+
+		DecimalFormat df = new DecimalFormat("#,###");
+		String formatNumber = df.format(balance);
+		return formatNumber + "원";
+	}
 
 	public void withDraw(Long amount) {
 		this.balance -= amount;
@@ -50,6 +58,7 @@ public class Account {
 	public void checkOwner(Integer principalId) {
 
 		if (userId != principalId) {
+			// FORBIDDEN : 인증은 됬지만 권한이 없는 에러
 			throw new CustomRestfullException("계좌 소유주가 아닙니다.", HttpStatus.FORBIDDEN);
 		}
 	}
