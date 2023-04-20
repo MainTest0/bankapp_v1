@@ -22,8 +22,8 @@ public class UserController {
 
 	@Autowired // DI 처리
 	private UserService userService;
-	
-	@Autowired	// DI 처리
+
+	@Autowired // DI 처리
 	private HttpSession session;
 
 	// http://localhost:8080/user/sign-up
@@ -82,36 +82,35 @@ public class UserController {
 	 * 
 	 * @param signInFormDto
 	 * 
-	 * @return 메인페이지 이동 ( 수정 예정 )
-	 * 생각해보기
-	 * GET방식 처리는 브라우저 history에 남겨지기 때문에
-	 * 예외적으로 로그인은 POST 방식으로 처리한다. (보안)
+	 * @return 메인페이지 이동 ( 수정 예정 ) 생각해보기 GET방식 처리는 브라우저 history에 남겨지기 때문에 예외적으로 로그인은
+	 * POST 방식으로 처리한다. (보안)
 	 */
 	@PostMapping("/sign-in")
 	public String signInProc(SignInFormDto signInFormDto) {
-		
+
 		// 1. 유효성 검사 (인증 검사가 더 우선)
-		if(signInFormDto.getUsername() == null || signInFormDto.getUsername().isEmpty()) {
+		if (signInFormDto.getUsername() == null || signInFormDto.getUsername().isEmpty()) {
 			throw new CustomRestfullException("username을 입력하세요", HttpStatus.BAD_REQUEST);
 		}
-		if(signInFormDto.getPassword() == null || signInFormDto.getPassword().isEmpty()) {
+		if (signInFormDto.getPassword() == null || signInFormDto.getPassword().isEmpty()) {
 			throw new CustomRestfullException("Password을 입력하세요", HttpStatus.BAD_REQUEST);
 		}
-		
+
 		User principal = userService.signIn(signInFormDto);
 		principal.setPassword(null);
 		session.setAttribute(Define.PRINCIPAL, principal);
-		
+
 		return "redirect:/account/list";
 	}
+
 	@GetMapping("/logout")
 	public String logout() {
-		
+
 		// 세션 완전 삭제하기
 		session.invalidate();
-		
+
 		return "redirect:/user/sign-in";
-		
+
 	}
 
 }
