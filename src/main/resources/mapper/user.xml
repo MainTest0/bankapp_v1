@@ -31,4 +31,9 @@
 		and password = #{password}
 	</select>
 	
+	<select id="findByPassword" resultType="com.tenco.bank.repository.model.User">
+		select password from user_tb 
+		where username = #{username}
+	</select>
+	
 </mapper>

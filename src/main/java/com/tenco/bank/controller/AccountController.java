@@ -20,7 +20,6 @@ import com.tenco.bank.dto.TransferFormDto;
 import com.tenco.bank.dto.WithDrawFormDto;
 import com.tenco.bank.dto.response.HistoryDto;
 import com.tenco.bank.handler.exception.CustomRestfullException;
-import com.tenco.bank.handler.exception.UnAuthorizedException;
 import com.tenco.bank.repository.model.Account;
 import com.tenco.bank.repository.model.User;
 import com.tenco.bank.service.AccountService;

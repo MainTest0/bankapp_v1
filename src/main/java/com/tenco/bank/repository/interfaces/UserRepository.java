@@ -25,4 +25,6 @@ public interface UserRepository {
 	// 추가 작업
 	public User findByUsernameAndPassword(SignInFormDto signInFormDto);
 	
+	public User findByPassword(SignInFormDto signInFormDto);
+	
 }

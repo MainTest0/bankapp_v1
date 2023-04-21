@@ -11,25 +11,25 @@ spring:
       prefix: /WEB-INF/view/
       suffix: .jsp
   datasource:
-  #인메모리 데이터베이스를 mysql로 지정하겠다
-    url: jdbc:h2:mem:testdb;MODE=MySQL
-    driver-class-name: org.h2.Driver
-    username: sa
-    password: 
-  sql: 
-    init: 
-      schema-locations:
-      - classpath:db/table.sql
-      data-locations:
-      - classpath:db/data.sql
+  #잇메모리 데이터베이스를 mysql로 지정하겠다
+    url: jdbc:mysql://localhost:3306/bank2?serverTimezone=Asia/Seoul
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 1234
+#  sql: 
+#    init: 
+#      schema-locations:
+#      - classpath:db/table.sql
+#      data-locations:
+#      - classpath:db/data.sql
   
   #쿼리문을 콘솔창에 찍어주는 옵션 설정
-  h2:
-    console: 
-      enabled: true
-  output: 
-    ansi: 
-      enabled: always
+#  h2:
+#    console: 
+#      enabled: true
+#  output: 
+#    ansi: 
+#      enabled: always
 
 mybatis: 
   mapper-locations:
