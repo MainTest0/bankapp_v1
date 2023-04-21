@@ -14,7 +14,7 @@
 	<!-- 부트스트랩 w3c에서 -->
 	<div class="bg-light p-md-5 h-75">
 		<div class="user--box">
-			${principal.username}님 계좌<br> 계좌번호 : ${account.number}<br> 잔액 : ${account.formatBalance()}
+			${principal.username}님 계좌<br> 계좌번호 : ${account.number}<br> 잔액 : ${account.formetMoney(account.balance)}
 		</div>
 		<!-- 버튼을 누를 때마다 출금, 입금 내역 등 보여주기 -->
 		<div>
@@ -39,8 +39,8 @@
 						<th>${history.formatCreatedAt()}</th>
 						<th>${history.sender}</th>
 						<th>${history.receiver}</th>
-						<th>${history.formatBalance()}</th>
-						<th>${history.formatBalance()}</th>
+						<th>${history.formetMoney(history.amount)}</th>
+						<th>${history.formetMoney(history.balance)}</th>
 					</tr>
 				</c:forEach>
 			</tbody>

@@ -22,11 +22,10 @@ public class HistoryDto {
 		return TimestampUtil.timestampToString(createdAt);
 	}
 
-	public String formatBalance() {
-
+	public String formetMoney(Long money) {
 		DecimalFormat df = new DecimalFormat("#,###");
-		String formatNumber = df.format(balance);
+		String formatNumber = df.format(money);
 		return formatNumber + "원";
 	}
-
+	
 }

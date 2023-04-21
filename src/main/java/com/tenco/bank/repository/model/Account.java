@@ -25,13 +25,6 @@ public class Account {
 	private Integer userId;
 	private Timestamp createdAt;
 
-	public String formatBalance() {
-
-		DecimalFormat df = new DecimalFormat("#,###");
-		String formatNumber = df.format(balance);
-		return formatNumber + "원";
-	}
-
 	public void withDraw(Long amount) {
 		this.balance -= amount;
 	}
@@ -40,6 +33,12 @@ public class Account {
 		this.balance += amount;
 	}
 
+	public String formetMoney(Long money) {
+		DecimalFormat df = new DecimalFormat("#,###");
+		String formatNumber = df.format(money);
+		return formatNumber + "원";
+	}
+	
 	// 패스워드 체크
 	public void checkPassword(String password) {
 		if (this.password.equals(password) == false) {

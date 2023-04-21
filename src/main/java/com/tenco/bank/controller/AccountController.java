@@ -60,9 +60,6 @@ public class AccountController {
 		 */
 
 		User principal = (User) session.getAttribute(Define.PRINCIPAL);
-		if (principal == null) {
-			throw new UnAuthorizedException("로그인 먼저 해주세요.", HttpStatus.UNAUTHORIZED);
-		}
 
 		// view 화면으로 데이터를 내려주는 기술
 		// 1. Model 2. ModelAndView
@@ -82,22 +79,13 @@ public class AccountController {
 	@GetMapping("/withdraw")
 	public String withdraw() {
 
-		User principal = (User) session.getAttribute(Define.PRINCIPAL);
-		if (principal == null) {
-			throw new UnAuthorizedException("로그인 먼저 해주세요", HttpStatus.UNAUTHORIZED);
-		}
-
 		return "/account/withdrawForm";
 	}
 
 	// 출금 처리 기능
 	@PostMapping("/withthdraw-proc")
 	public String withthdrawProc(WithDrawFormDto withDrawFormDto) {
-
 		User principal = (User) session.getAttribute(Define.PRINCIPAL);
-		if (principal == null) {
-			throw new UnAuthorizedException("로그인 먼저 해주세요.", HttpStatus.UNAUTHORIZED);
-		}
 		// 유효성 검사
 		if (withDrawFormDto.getAmount() == null) {
 			throw new CustomRestfullException("금액을 입력하세요", HttpStatus.BAD_REQUEST);
@@ -121,22 +109,13 @@ public class AccountController {
 	@GetMapping("/deposit")
 	public String deposit() {
 
-		User principal = (User) session.getAttribute(Define.PRINCIPAL);
-		if (principal == null) {
-			throw new UnAuthorizedException("로그인 먼저 해주세요", HttpStatus.UNAUTHORIZED);
-		}
-
 		return "/account/depositForm";
 	}
 
 	// 입금 처리 기능
 	@PostMapping("/deposit-proc")
 	public String depositProc(DepositFormDto depositFormDto) {
-		// 인증 처리
-		User principal = (User) session.getAttribute(Define.PRINCIPAL);
-		if (principal == null) {
-			throw new UnAuthorizedException("로그인 먼저 해주세요", HttpStatus.UNAUTHORIZED);
-		}
+
 		// 유효성 검사
 		if (depositFormDto.getAmount() == null || depositFormDto.getAmount().longValue() <= 0) {
 			throw new CustomRestfullException("금액을 입력해주세요", HttpStatus.BAD_REQUEST);
@@ -158,10 +137,6 @@ public class AccountController {
 	@GetMapping("/transfer")
 	public String transper() {
 
-		if (session.getAttribute(Define.PRINCIPAL) == null) {
-			throw new CustomRestfullException("로그인 먼저 해주세요", HttpStatus.UNAUTHORIZED);
-		}
-
 		return "/account/transferForm";
 	}
 
@@ -170,9 +145,6 @@ public class AccountController {
 	public String transferProc(TransferFormDto transferFormDto) {
 
 		User principal = (User) session.getAttribute(Define.PRINCIPAL);
-		if (principal == null) {
-			throw new CustomRestfullException("로그인 먼저 해주세요", HttpStatus.UNAUTHORIZED);
-		}
 		// ------유효성 검사만 계좌있는지는 서비스쪽에서
 
 		// 6. 이체금액 안적었을 때
@@ -210,10 +182,6 @@ public class AccountController {
 	@GetMapping("/save")
 	public String save() {
 		// 인증 검사 처리
-		User user = (User) session.getAttribute(Define.PRINCIPAL);
-		if (user == null) {
-			throw new UnAuthorizedException("로그인 먼저 해주세요", HttpStatus.UNAUTHORIZED);
-		}
 
 		return "/account/save";
 	}
@@ -227,9 +195,6 @@ public class AccountController {
 	@PostMapping("/save-proc")
 	public String saveProc(SaveFormDto saveFormDto) {
 		User user = (User) session.getAttribute(Define.PRINCIPAL);
-		if (user == null) {
-			throw new UnAuthorizedException("로그인 먼저 해주세요", HttpStatus.UNAUTHORIZED);
-		}
 		// 유효성 검사하기
 		if (saveFormDto.getNumber() == null || saveFormDto.getNumber().isEmpty()) {
 			throw new CustomRestfullException("계좌번호를 입력해주세요", HttpStatus.BAD_REQUEST);
@@ -249,16 +214,14 @@ public class AccountController {
 
 	// 계좌 상세 보기 페이지
 	@GetMapping("/detail/{id}")
-	public String detail(@PathVariable Integer id, @RequestParam(name = "type", defaultValue = "all", required = false) String type, Model model) {
+	public String detail(@PathVariable Integer id,
+			@RequestParam(name = "type", defaultValue = "all", required = false) String type, Model model) {
 		User principal = (User) session.getAttribute(Define.PRINCIPAL);
-		if(principal == null) {
-			throw new CustomRestfullException("로그인 먼저 해주세요", HttpStatus.UNAUTHORIZED);
-		}
-		System.out.println("type : " + type);
+
 		// 거래내역 결과 집합 = 서비스.메서드();
 		List<HistoryDto> historyList = accountService.readHistoryListByAccount(type, id);
 		Account account = accountService.readAccount(id);
-		
+
 		// 화면을 구성하기 위해 필요한 데이터 살펴보기
 		// 소유자 이름
 		// 계좌번호(1개)상세보기
@@ -267,8 +230,7 @@ public class AccountController {
 		model.addAttribute("principal", principal);
 		model.addAttribute("account", account);
 		model.addAttribute("historyList", historyList);
-		
-		
+
 		return "/account/detail";
 	}
 }
