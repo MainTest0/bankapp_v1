@@ -29,10 +29,10 @@ public class UserService {
 	public void createUser(SignUpFormDto signUpFormDto) {
 		
 		// 암호화 해보기
-		String rawPwd = signUpFormDto.getPassword();
+//		String rawPwd = signUpFormDto.getPassword();
 		// BCryptPasswordEncoder IoC로 관리
-		String hashPwd = passwordEncoder.encode(rawPwd);
-		signUpFormDto.setPassword(hashPwd);	//객체 상태 변경
+//		String hashPwd = passwordEncoder.encode(rawPwd);
+//		signUpFormDto.setPassword(hashPwd);	//객체 상태 변경
 
 		// DAO 가져와서 메서드 호출했었음
 		// 지금은 MyBatis 쓰고있음
